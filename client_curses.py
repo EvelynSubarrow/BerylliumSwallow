@@ -9,7 +9,7 @@ import curses
 from common import database
 
 def process_time(unix_time):
-    out = OrderedDict([("ut",None), ("iso", None), ("short", "")])
+    out = OrderedDict([("ut",None), ("iso", None), ("date", None), ("short", "")])
     if unix_time:
         dt = datetime.datetime.fromtimestamp(float(unix_time))
         out["ut"] = unix_time
