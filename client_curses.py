@@ -394,7 +394,7 @@ class ServiceBuffer(Buffer):
 
             "trust_departure": {
                 "platform": ("pt.", 3, platform_justify),
-                "source": ("source", 1)
+                "source": ("source", 1, None, 3),
             },
 
             "platform": ("pt.", 3, platform_justify),
