@@ -518,6 +518,7 @@ def main(stdscr):
     cursor_pos = 0
     k = ""
     text_entry_mode = False
+    text_entry_invalidated = True
 
     current_buffer = TextBuffer(
         "Welcome to BeryilliumSwallow",
@@ -556,10 +557,14 @@ def main(stdscr):
             window_footer.addstr(0,0, compose)
 
             window_footer.move(0, cursor_pos)
-            window_footer.refresh()
+
+            if text_entry_invalidated:
+                window_footer.refresh()
 
             # Now the cursor's in position, display it
             curses.curs_set(1)
+            # If it was invalidated, it's not any more
+            text_entry_invalidated = False
 
         k = stdscr.getch()
         if k == curses.KEY_RESIZE:
@@ -571,9 +576,11 @@ def main(stdscr):
                 if cursor_pos:
                     compose = compose[:cursor_pos-1] + compose[cursor_pos:]
                     cursor_pos -= 1
+                    text_entry_invalidated = True
             elif k == 0x14A:
                 if cursor_pos:
                     compose = compose[:cursor_pos] + compose[cursor_pos+1:]
+                    text_entry_invalidated = True
             elif k == curses.KEY_LEFT:
                 cursor_pos = max(cursor_pos-1, 0)
             elif k == curses.KEY_RIGHT:
@@ -598,6 +605,7 @@ def main(stdscr):
                 if cursor_pos < win_cols-1:
                     compose = compose[:cursor_pos] + chr(k) + compose[cursor_pos:]
                     cursor_pos += 1
+                    text_entry_invalidated = True
                 else:
                     curses.beep()
         else:
